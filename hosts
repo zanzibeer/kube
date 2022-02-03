@@ -1,0 +1,8 @@
+[KUBE]
+master1 ansible_host=192.168.110.10
+master2 ansible_host=192.168.110.11
+master3 ansible_host=192.168.110.12
+worker1 ansible_host=192.168.110.13
+worker2 ansible_host=192.168.110.14 
+worker3 ansible_host=192.168.110.15
+ingress1 ansible_host=192.168.110.16
