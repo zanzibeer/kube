@@ -1,5 +1,6 @@
 [KUBE]
-master1 ansible_host=192.168.10.111
+#master1 ansible_host=172.16.21.2
+master1 ansible_host=192.168.159.123
 #master2 ansible_host=192.168.110.11
 #master3 ansible_host=192.168.110.12
 #worker1 ansible_host=192.168.110.13

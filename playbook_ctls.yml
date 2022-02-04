@@ -28,8 +28,16 @@
 
   - name: Copy k8s.conf
     copy:
-      src: ./configs/kube/k8s.conf
+      src: ./configs/sysctl.d/k8s.conf
       dest: /etc/sysctl.d/
+      mode: 0755
+      owner: root
+      group: root
+
+  - name: Copy k8s.conf
+    copy:
+      src: ./configs/modules-load.d/k8s.conf
+      dest: /etc/modules-load.d/
       mode: 0755
       owner: root
       group: root
@@ -37,3 +45,23 @@
 
   - name: Enable k8s.conf
     shell: 'sysctl --system'
+
+  - name: Add gpg-key of Google repo
+    apt_key:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      state: present
+
+  - name: Add kubernetes repo
+    apt_repository:
+      repo: deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main
+      state: present
+
+
+  - name: Install kubelet kubeadm kubectl
+    apt:
+      name:
+      - kubelet
+      - kubeadm
+      - kubectl
+      state: latest
+      update_cache: yes
