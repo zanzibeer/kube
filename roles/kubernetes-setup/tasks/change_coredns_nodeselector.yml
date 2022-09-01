@@ -1,0 +1,23 @@
+---
+- block:
+
+
+    - name: Generate coredns.sh script
+      template:
+        src: coredns.j2
+        dest: $HOME/coredns.sh
+        mode: 0700
+
+    - name: Add labels on nodes & taints on ingresses
+      shell: $HOME/coredns.sh
+
+#    - name: Change NodeSelector in CoreDNS deployment and apply
+#      shell: "{{ item }}"
+#      args:
+#        chdir: $HOME
+#      loop:
+#        - "kubectl -n kube-system get deployments.apps coredns -o yaml >> coredns.yml"
+#        - "sed -i 's+kubernetes.io/os: linux+node-role.kubernetes.io/control-plane: ""+g' coredns.yml"
+#        - "kubectl apply -f coredns.yml"
+
+  when: "'k8s-master01' in ansible_hostname"

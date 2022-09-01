@@ -1,0 +1,14 @@
+---
+- block:
+
+    - name: Generate HAProxy-ingress manifest file
+      template:
+        src: haproxy-ingress.j2
+        dest: $HOME/haproxy-ingress.yml
+
+    - name: Create HAProxy-ingress-controller from manifest file
+      shell: kubectl apply -f haproxy-ingress.yml
+      args:
+        chdir: $HOME
+
+  when: "'k8s-master01' in ansible_hostname"

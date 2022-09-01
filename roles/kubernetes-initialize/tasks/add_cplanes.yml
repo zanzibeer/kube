@@ -1,0 +1,12 @@
+---
+- block:
+
+    - name: Join controlPlanes to cluster
+      shell: "{{ hostvars['k8s-master01'].cplanes_join_command }} >> cplanes_joined.txt"
+      args:
+        chdir: $HOME
+        creates: cplanes_joined.txt
+
+  when:
+    - "'master' in ansible_hostname"
+    - "'master01' not in ansible_hostname"

@@ -1,0 +1,24 @@
+---
+- block:
+
+    - name: Download Helm archive
+      unarchive:
+        src: "https://get.helm.sh/helm-v{{ helm_release }}-linux-amd64.tar.gz"
+        dest: $HOME
+        remote_src: yes
+
+    - name: Copy Helm bin
+      copy:
+        src: $HOME/linux-amd64/helm
+        dest: /usr/local/bin/helm
+        remote_src: yes
+        mode: 0755
+        owner: root
+        group: root
+
+    - name: Delete helm install dir
+      file:
+        path: $HOME/linux-amd64
+        state: absent
+
+  when: ansible_facts['hostname'] == "k8s-master01"

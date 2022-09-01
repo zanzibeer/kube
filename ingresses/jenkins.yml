@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myweb
+  namespace: pipeline-demo
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: myweb.cluster.local
+      http:
+        paths:
+          - pathType: Prefix
+            backend:
+              service:
+                name: myweb
+                port:
+                  number: 80
+            path: /

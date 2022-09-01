@@ -1,0 +1,22 @@
+---
+- name: Setup
+  hosts: k8snodes
+  remote_user: root
+  become: yes
+  become_method: sudo
+  #gather_facts: no
+  vars:
+    username_sudo: "user"                                # username for connection with sudo
+    balancer_address: "api.k8s.local"                    # address of load balancer
+    nfs_server: "192.168.10.125"                         # address of nfs-node
+    nfs_path: "/nfs_kube"                                # name of nfs share folder
+    provisioner_name: "nfs-client-provisioner"
+    storageclass_name: "nfs-storage"
+    # Docker proxy support
+    setup_proxy: false                                   # Set to true to configure proxy
+    proxy_server: "proxy.example.com:8080"               # Proxy server address and port
+    docker_proxy_exclude: "localhost,127.0.0.1"          # Adresses to exclude from proxy
+
+  roles:
+    - role: kubernetes-setup
+      tags: setup

@@ -1,0 +1,18 @@
+---
+- name: Configure timezone on all nodes
+  timezone:
+    name: "{{ timezone }}"
+
+- name: Ensure chrony package is installed
+  apt:
+    name: chrony
+    state: present
+
+- name: Enable and start chronyd service
+  service:
+    name: chronyd
+    state: started
+    enabled: yes
+
+- name: Synchronize time manually
+  shell:  chronyc sources

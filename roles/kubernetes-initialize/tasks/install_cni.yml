@@ -1,0 +1,22 @@
+---
+- block:
+
+    - name: Generate Calico manifest file
+      template:
+        src: calico.j2
+        dest: $HOME/calico.yml
+      when: k8s_cni == "calico"
+
+    - name: install Calico CNI
+      shell: kubectl apply -f calico.yml
+      args:
+        chdir: $HOME
+      when: k8s_cni == "calico"
+
+    - name: install Flannel CNI
+      shell: kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+      args:
+        chdir: $HOME
+      when: k8s_cni == "flannel"
+
+  when: ansible_facts['hostname'] == "k8s-master01"

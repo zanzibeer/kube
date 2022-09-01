@@ -1,0 +1,9 @@
+---
+- block:
+
+    - name: Add autocomplete persistant
+      shell: echo "source <(kubectl completion bash)" >> ~/.bashrc
+      args:
+        chdir: $HOME
+
+  when: ansible_facts['hostname'] == "k8s-master01"

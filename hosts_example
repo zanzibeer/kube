@@ -1,10 +1,11 @@
-[KUBE]
-#master1 ansible_host=172.16.21.2
-master1 ansible_host=192.168.159.123
-#master2 ansible_host=192.168.110.11
-#master3 ansible_host=192.168.110.12
-#worker1 ansible_host=192.168.110.13
-#worker2 ansible_host=192.168.110.14 
-#worker3 ansible_host=192.168.110.15
-#ingress1 ansible_host=192.168.110.16
+[k8snodes]
+k8s-master01 ansible_host=
+k8s-master02 ansible_host=
+k8s-master03 ansible_host=
+k8s-node01 ansible_host=
+k8s-node02 ansible_host=
+k8s-node03 ansible_host=
+k8s-ingress01 ansible_host=
 
+[nfs]
+k8s-nfs

@@ -1,0 +1,27 @@
+---
+- name: Add the OS variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml"
+
+- name: Initialize k8s cluster
+  include_tasks: initialize_k8s_cluster.yml
+
+- name: Install CNI
+  include_tasks: install_cni.yml
+
+- name: Get join commands
+  include_tasks: get_join_commands.yml
+
+- name: Add ControlPlane's
+  include_tasks: add_cplanes.yml
+
+- name: Add workers
+  include_tasks: add_nodes.yml
+
+- name: Label nodes
+  include_tasks: add_labels_taints.yml
+
+- name: Autocomplete
+  include_tasks: add_autocomplete.yml

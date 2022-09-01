@@ -1,0 +1,23 @@
+---
+- name : Install ssh key to all hosts
+  hosts: all
+  become: yes
+  gather_facts: no
+
+  tasks:
+
+  - name: Allow 'user' to have passwordless sudo
+    lineinfile:
+      dest: /etc/sudoers
+      line: 'user ALL=(ALL) NOPASSWD: ALL'
+      validate: 'visudo -cf %s'
+
+  - name: Set authorized key took from file
+    authorized_key:
+      user: user
+      state: present
+#    key: "{{ lookup('file', '/home/.ssh/id_rsa.pub') }}"
+      key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"
+
+  - name: set system hostname
+    command: hostnamectl set-hostname {{ inventory_hostname }}

@@ -1,0 +1,28 @@
+---
+- block:
+
+    - name: Copy kube-init.yaml
+      template:
+        src: kube-init.j2
+        dest: $HOME/kube-init.yml
+
+    - name: Initialize the cluster
+      shell: kubeadm init --config kube-init.yml --upload-certs | tee -a kube_init.log
+      args:
+        chdir: $HOME
+
+    - name: Create .kube directory
+      file:
+        path: $HOME/.kube
+        state: directory
+        mode: 0755
+
+    - name: Copy admin.conf to user's kube config
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: $HOME/.kube/config
+        remote_src: yes
+        owner: root
+        mode: 0600
+
+  when: ansible_facts['hostname'] == "k8s-master01"

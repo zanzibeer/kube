@@ -1,0 +1,10 @@
+---
+- block:
+
+    - name: Join nodes to cluster
+      shell: "{{ hostvars['k8s-master01'].nodes_join_command }} >> nodes_joined.txt"
+      args:
+        chdir: $HOME
+        creates: nodes_joined.txt
+
+  when: "'master' not in ansible_hostname"

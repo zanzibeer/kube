@@ -1,0 +1,20 @@
+---
+- block:
+
+    - name: get join command
+      shell: kubeadm token create --print-join-command
+      register: join_command_raw
+
+    - name: set join command for nodes
+      set_fact:
+        nodes_join_command: "{{ join_command_raw.stdout_lines[0] }}"
+
+    - name: get certificate key
+      shell: kubeadm init phase upload-certs --upload-certs | tail -n 1
+      register: cplane_certificate_key
+
+    - name: set join command for cplanes
+      set_fact:
+        cplanes_join_command: "{{ join_command_raw.stdout_lines[0] }} --control-plane --certificate-key {{ cplane_certificate_key.stdout_lines[0] }}"
+
+  when: "'k8s-master01' in ansible_hostname"

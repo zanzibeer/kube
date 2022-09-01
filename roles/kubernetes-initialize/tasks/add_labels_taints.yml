@@ -1,0 +1,15 @@
+---
+- block:
+
+    - name: Generate labels.sh script
+      template:
+        src: hosts.j2
+        dest: $HOME/labels.sh
+        mode: 0700
+
+    - name: Add labels on nodes & taints on ingresses
+      shell: $HOME/labels.sh
+#      args:
+#        chdir: $HOME
+
+  when: "'k8s-master01' in ansible_hostname"

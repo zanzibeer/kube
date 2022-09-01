@@ -1,0 +1,11 @@
+#!/bin/bash
+
+{% for host in groups['k8snodes'] %}
+{% if "node" in hostvars[host]['ansible_facts']['hostname'] and "node-role.kubernetes.io/node" not in hostvars[host]['ansible_facts']['labels'] %}
+kubectl label node {{ hostvars[host]['ansible_facts']['hostname'] }} node-role.kubernetes.io/node=""
+{% elif "ingress" in hostvars[host]['ansible_facts']['hostname'] and "node-role.kubernetes.io/ingress" not in hostvars[host]['ansible_facts']['labels'] %}
+kubectl label node {{ hostvars[host]['ansible_facts']['hostname'] }} node-role.kubernetes.io/ingress=""
+{% elif "ingress" in hostvars[host]['ansible_facts']['hostname'] and "node-role.kubernetes.io/ingress" not in hostvars[host]['ansible_facts']['taints'] %}
+kubectl taint node {{ hostvars[host]['ansible_facts']['hostname'] }} node-role.kubernetes.io/ingress="":NoExecute
+{% endif %}
+{% endfor %}

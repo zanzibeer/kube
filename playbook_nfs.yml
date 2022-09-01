@@ -1,0 +1,71 @@
+---
+- name : Configure NFS
+  hosts: nfs
+  become: yes
+  gather_facts: no
+  vars:
+    timezone: "Europe/Moscow"                            # Timezone to set on all nodes
+    helm_release: "3.8.0"                                # Helm version to be installed / https://github.com/helm/helm/releases
+
+  tasks:
+
+  - name: Allow 'user' to have passwordless sudo
+    lineinfile:
+      dest: /etc/sudoers
+      line: 'user ALL=(ALL) NOPASSWD: ALL'
+      validate: 'visudo -cf %s'
+
+  - name: Set authorized key took from file
+    authorized_key:
+      user: user
+      state: present
+      key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"
+
+  - name: Update system packages
+    apt:
+      name: "*"
+      state: latest
+      update_cache: yes
+
+  - name: Install some packages needed to configure the nfs
+    apt:
+      name: "{{ item }}"
+      state: latest
+    loop:
+      - vim
+      - bash-completion
+      - wget
+      - curl
+      - apt-transport-https
+      - ca-certificates
+      - gnupg
+      - lsb-release
+      - ntp
+      - tmux
+      - nfs-kernel-server
+
+  - name: set system hostname
+    command: hostnamectl set-hostname {{ inventory_hostname }}
+
+#  - name: Generate /etc/hosts file
+#    template:
+#      src: roles/kubernetes-bootstrap/templates/hosts.j2
+#      dest: /etc/hosts
+
+  - name: Configure timezone on all nodes
+    timezone:
+      name: "{{ timezone }}"
+
+  - name: Ensure chrony package is installed
+    apt:
+      name: chrony
+      state: present
+
+  - name: Enable and start chronyd service
+    service:
+      name: chronyd
+      state: started
+      enabled: yes
+
+  - name: Synchronize time manually
+    shell:  chronyc sources

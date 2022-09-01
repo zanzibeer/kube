@@ -1,0 +1,29 @@
+---
+- block:
+
+    - name: Generate manifest file for create dashboard admin user
+      template:
+        src: dashboard.j2
+        dest: $HOME/dashboard.yml
+
+    - name: Instal kubernetes dashboard
+      shell: kubectl apply -f dashboard.yml
+      args:
+        chdir: $HOME
+
+    - name: Generate manifest file for create dashboard admin user
+      template:
+        src: dashboard-adminuser.j2
+        dest: $HOME/dashboard-adminuser.yml
+
+    - name: Create dashboard admin user from manifest file
+      shell: kubectl apply -f dashboard-adminuser.yml
+      args:
+        chdir: $HOME
+
+#    - name: Save admin token in file
+#      shell: 'kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}" >> token'
+#      args:
+#        chdir: $HOME
+
+  when: ansible_facts['hostname'] == "k8s-master01"

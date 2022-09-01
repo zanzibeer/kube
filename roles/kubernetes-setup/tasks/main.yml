@@ -1,0 +1,30 @@
+---
+- name: Add the OS variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_os_family }}.yml"
+
+- name: Change NodeSelector in CoreDNS deployment
+  include_tasks: change_coredns_nodeselector.yml
+
+- name: Install NodeLocal DNSCache
+  include_tasks: install_nodelocal.yml
+
+- name: Install Kubernetes Dashboard
+  include_tasks: install-dashboard.yml
+
+- name: Install metrics-server
+  include_tasks: install-metrics-server.yml
+
+- name: Install nfs-provisioner
+  include_tasks: install-nfs-provisioner.yml
+
+- name: Install jenkins
+  include_tasks: install_jenkins.yml
+
+#- name: Install HAProxy ingress-controller
+#  include_tasks: install-haproxy-ingress.yml
+#
+#- name: Add ingress rules for Dashboard
+#  include_tasks: add_dashboard_ingress.yml

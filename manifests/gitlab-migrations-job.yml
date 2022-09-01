@@ -1,0 +1,170 @@
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: gitlab-migrations-1
+  namespace: gitlab
+  labels:
+    app: migrations
+    app.kubernetes.io/managed-by: Helm
+    chart: migrations-6.2.1
+    heritage: Helm
+    release: gitlab
+  annotations:
+    meta.helm.sh/release-name: gitlab
+    meta.helm.sh/release-namespace: gitlab
+spec:
+  parallelism: 1
+  completions: 1
+  activeDeadlineSeconds: 3600
+  backoffLimit: 6
+  selector:
+    matchLabels:
+      controller-uid: 15920ba5-79d2-47bb-b021-25421a44a8d7
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: migrations
+        chart: migrations-6.2.1
+        controller-uid: 15920ba5-79d2-47bb-b021-25421a44a8d7
+        heritage: Helm
+        job-name: gitlab-migrations-1
+        release: gitlab
+    spec:
+      volumes:
+        - name: migrations-config
+          configMap:
+            name: gitlab-migrations
+            defaultMode: 420
+        - name: init-migrations-secrets
+          projected:
+            sources:
+              - secret:
+                  name: gitlab-rails-secret
+                  items:
+                    - key: secrets.yml
+                      path: rails-secrets/secrets.yml
+              - secret:
+                  name: gitlab-gitaly-secret
+                  items:
+                    - key: token
+                      path: gitaly/gitaly_token
+              - secret:
+                  name: gitlab-redis-secret
+                  items:
+                    - key: secret
+                      path: redis/redis-password
+              - secret:
+                  name: gitlab-postgresql-password
+                  items:
+                    - key: postgresql-password
+                      path: postgres/psql-password-main
+              - secret:
+                  name: gitlab-gitlab-initial-root-password
+                  items:
+                    - key: password
+                      path: migrations/initial_root_password
+              - secret:
+                  name: gitlab-gitlab-runner-secret
+                  items:
+                    - key: runner-registration-token
+                      path: migrations/gitlab_shared_runners_registration_token
+            defaultMode: 256
+        - name: migrations-secrets
+          emptyDir:
+            medium: Memory
+        - name: etc-ssl-certs
+          emptyDir:
+            medium: Memory
+        - name: etc-pki-ca-trust-extracted-pem
+          emptyDir:
+            medium: Memory
+      initContainers:
+        - name: certificates
+          image: >-
+            registry.gitlab.com/gitlab-org/build/cng/alpine-certificates:20191127-r2@sha256:367d437d024d7647432d67fb2442e3e5723af5930bad77d3535f4f8f4f8630d9
+          resources:
+            requests:
+              cpu: 50m
+          volumeMounts:
+            - name: etc-ssl-certs
+              mountPath: /etc/ssl/certs
+            - name: etc-pki-ca-trust-extracted-pem
+              mountPath: /etc/pki/ca-trust/extracted/pem
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+        - name: configure
+          image: >-
+            registry.gitlab.com/gitlab-org/cloud-native/mirror/images/busybox:latest
+          command:
+            - sh
+            - /config/configure
+          resources:
+            requests:
+              cpu: 50m
+          volumeMounts:
+            - name: migrations-config
+              readOnly: true
+              mountPath: /config
+            - name: init-migrations-secrets
+              readOnly: true
+              mountPath: /init-config
+            - name: migrations-secrets
+              mountPath: /init-secrets
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      containers:
+        - name: migrations
+          image: registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee:v15.2.1
+          args:
+            - /scripts/wait-for-deps
+            - /scripts/db-migrate
+          env:
+            - name: CONFIG_TEMPLATE_DIRECTORY
+              value: /var/opt/gitlab/templates
+            - name: CONFIG_DIRECTORY
+              value: /srv/gitlab/config
+            - name: BYPASS_SCHEMA_VERSION
+              value: 'true'
+            - name: ENABLE_BOOTSNAP
+              value: '1'
+          resources:
+            requests:
+              cpu: 250m
+              memory: 200Mi
+          volumeMounts:
+            - name: migrations-config
+              mountPath: /var/opt/gitlab/templates
+            - name: migrations-secrets
+              readOnly: true
+              mountPath: /etc/gitlab
+            - name: migrations-secrets
+              mountPath: /srv/gitlab/config/secrets.yml
+              subPath: rails-secrets/secrets.yml
+            - name: migrations-secrets
+              mountPath: /srv/gitlab/config/initial_root_password
+              subPath: migrations/initial_root_password
+            - name: migrations-secrets
+              mountPath: /srv/gitlab/config/gitlab_shared_runners_registration_token
+              subPath: migrations/gitlab_shared_runners_registration_token
+            - name: etc-ssl-certs
+              readOnly: true
+              mountPath: /etc/ssl/certs/
+            - name: etc-pki-ca-trust-extracted-pem
+              readOnly: true
+              mountPath: /etc/pki/ca-trust/extracted/pem
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: OnFailure
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
+      schedulerName: default-scheduler
+  completionMode: NonIndexed
+  suspend: false

@@ -1,0 +1,314 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: haproxy-controller
+  labels:
+    app.kubernetes.io/name: haproxy-ingress
+    app.kubernetes.io/instance: haproxy-ingress
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: haproxy-ingress
+    app.kubernetes.io/instance: haproxy-ingress
+    app.kubernetes.io/component: controller
+  name: haproxy-kubernetes-ingress
+  namespace: haproxy-controller
+
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  labels:
+    app.kubernetes.io/name: haproxy-ingress
+    app.kubernetes.io/instance: haproxy-ingress
+    app.kubernetes.io/component: controller
+  name: haproxy-kubernetes-ingress
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - endpoints
+  - nodes
+  - pods
+  - services
+  - namespaces
+  - events
+  - serviceaccounts
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - "extensions"
+  - "networking.k8s.io"
+  resources:
+  - ingresses
+  - ingresses/status
+  - ingressclasses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - "extensions"
+  - "networking.k8s.io"
+  resources:
+  - ingresses/status
+  verbs:
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - patch
+  - update
+- apiGroups:
+  - core.haproxy.org
+  resources:
+  - '*'
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+- apiGroups:
+  - "discovery.k8s.io"
+  resources:
+  - endpointslices
+  verbs:
+  - get
+  - list
+  - watch
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  labels:
+    app.kubernetes.io/name: haproxy-ingress
+    app.kubernetes.io/instance: haproxy-ingress
+    app.kubernetes.io/component: controller
+  name: haproxy-kubernetes-ingress
+  namespace: haproxy-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: haproxy-kubernetes-ingress
+subjects:
+- kind: ServiceAccount
+  name: haproxy-kubernetes-ingress
+  namespace: haproxy-controller
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: haproxy-ingress
+    app.kubernetes.io/instance: haproxy-ingress
+    app.kubernetes.io/component: controller
+  name: haproxy-kubernetes-ingress
+  namespace: haproxy-controller
+data:
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: haproxy-ingress
+    app.kubernetes.io/instance: haproxy-ingress
+    app.kubernetes.io/component: controller
+    run: ingress-default-backend
+  name: haproxy-kubernetes-ingress-default-backend
+  namespace: haproxy-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: ingress-default-backend
+  template:
+    metadata:
+      labels:
+        run: ingress-default-backend
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/node
+                operator: In
+                values:
+                - ingress
+      containers:
+      - name: ingress-default-backend
+        image: k8s.gcr.io/defaultbackend-amd64:1.5
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: haproxy-ingress
+    app.kubernetes.io/instance: haproxy-ingress
+    app.kubernetes.io/component: controller
+    run: ingress-default-backend
+  name: haproxy-kubernetes-ingress-default-backend
+  namespace: haproxy-controller
+spec:
+  selector:
+    run: ingress-default-backend
+  ports:
+  - name: port-1
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: haproxy-ingress
+    app.kubernetes.io/instance: haproxy-ingress
+    app.kubernetes.io/component: controller
+    run: haproxy-ingress
+  name: haproxy-kubernetes-ingress
+  namespace: haproxy-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: haproxy-ingress
+  template:
+    metadata:
+      labels:
+        run: haproxy-ingress
+    spec:
+      dnsPolicy: ClusterFirst
+      #hostNetwork: true
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/node
+                operator: In
+                values:
+                - ingress
+      serviceAccountName: haproxy-kubernetes-ingress
+      containers:
+      - name: haproxy-ingress
+        image: haproxytech/kubernetes-ingress:1.7.5
+        args:
+          - --configmap=haproxy-controller/haproxy-kubernetes-ingress
+          - --default-backend-service=haproxy-controller/haproxy-kubernetes-ingress-default-backend
+          - --ingress-class=myingress
+          - --log=info
+        securityContext:
+          runAsUser:  1000
+          runAsGroup: 1000
+          capabilities:
+            drop:
+              - ALL
+            add:
+              - NET_BIND_SERVICE
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "50Mi"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 1042
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        - name: https
+          containerPort: 443
+          protocol: TCP
+        - name: stat
+          containerPort: 1024
+          protocol: TCP
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      initContainers:
+        - name: sysctl
+          image: busybox:musl
+          command:
+            - /bin/sh
+            - -c
+            - sysctl -w net.ipv4.ip_unprivileged_port_start=0
+          securityContext:
+            privileged: true
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: haproxy-ingress
+    app.kubernetes.io/instance: haproxy-ingress
+    app.kubernetes.io/component: controller
+    run: haproxy-ingress
+  name: haproxy-kubernetes-ingress
+  namespace: haproxy-controller
+spec:
+  selector:
+    run: haproxy-ingress
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  - name: stat
+    port: 1024
+    protocol: TCP
+    targetPort: 1024
+
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  labels:
+    app.kubernetes.io/name: haproxy-ingress
+    app.kubernetes.io/instance: haproxy-ingress
+    app.kubernetes.io/component: controller
+    run: haproxy-ingress
+  name: haproxy-myingress
+spec:
+  controller: haproxy.org/ingress-controller/myingress

@@ -1,0 +1,28 @@
+---
+- name: Setup
+  hosts: k8snodes
+  remote_user: root
+  become: yes
+  become_method: sudo
+  #gather_facts: no
+  vars:
+    k8s_version: "1.23.3"                                # Kubernetes version to be installed / https://kubernetes.io/releases/
+    crictl_version: "1.23.0"                             # Crictl version to be installed / https://github.com/kubernetes-sigs/cri-tools/releases
+    nerdctl_version: "0.16.1"                            # Nerdctl version to be installed / https://github.com/containerd/nerdctl/releases
+    selinux_state: permissive                            # SELinux state to be set on k8s nodes
+    timezone: "Europe/Moscow"                            # Timezone to set on all nodes
+    k8s_cni: "calico"                                    # calico, flannel
+    container_runtime: "containerd"                      # cri-o, containerd
+    pod_network_cidr: "10.244.0.0/16"                    # pod subnet
+    configure_firewalld: false                           # true / false (keep it false, k8s>1.19 have issues with firewalld)
+    username_sudo: "user"                                # username for connection with sudo
+    helm_release: "3.8.0"                                # Helm version to be installed / https://github.com/helm/helm/releases
+    balancer_address: "api.k8s.local"                    # address of load balancer
+    # Docker proxy support
+    setup_proxy: false                                   # Set to true to configure proxy
+    proxy_server: "proxy.example.com:8080"               # Proxy server address and port
+    docker_proxy_exclude: "localhost,127.0.0.1"          # Adresses to exclude from proxy
+  roles:
+    - role: kubernetes-bootstrap
+    - role: kubernetes-initialize
+      tags: init

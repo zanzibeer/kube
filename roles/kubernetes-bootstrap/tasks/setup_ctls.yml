@@ -1,0 +1,17 @@
+---
+- name: Download crictl
+  unarchive:
+    src: 'https://github.com/kubernetes-sigs/cri-tools/releases/download/v{{ crictl_version }}/crictl-v{{ crictl_version }}-linux-amd64.tar.gz'
+    dest: /usr/bin
+    remote_src: yes
+
+- name: Download nerdctl
+  unarchive:
+    src: 'https://github.com/containerd/nerdctl/releases/download/v{{ nerdctl_version }}/nerdctl-{{ nerdctl_version }}-linux-amd64.tar.gz'
+    dest: /usr/bin
+    remote_src: yes
+
+- name: Copy crictl config file
+  template:
+    src: crictl.j2
+    dest: /etc/crictl.yml

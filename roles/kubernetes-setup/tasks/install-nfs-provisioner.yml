@@ -1,0 +1,33 @@
+---
+- block:
+
+#    - name: Add nfs-subdir-external-provisioner chart repo
+#      kubernetes.core.helm_repository:
+#        name: nfs-subdir-external-provisioner
+#        repo_url: "https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner"
+#
+#    - name: Install nfs-subdir-external-provisioner from chart
+#      kubernetes.core.helm:
+#        release_name: nfs-external-provisioner
+#        release_namespace: nfs-storage
+#        create_namespace: yes
+#        update_repo_cache: yes
+#        chart_ref: "nfs-subdir-external-provisioner/nfs-subdir-external-provisioner"
+#        release_values:
+#          nfs:
+#            server: "{{ nfs_server }}"
+#            path: "{{ nfs_path }}"
+#          storageClass:
+#            provisionerName: nfs-external-provisioner
+
+    - name: Generate manifest file for NFS Provisioner
+      template:
+        src: nfs-provisioner.j2
+        dest: $HOME/nfs-provisioner.yml
+
+    - name: Install NFS Provisioner
+      shell: kubectl apply -f nfs-provisioner.yml
+      args:
+        chdir: $HOME
+
+  when: "'k8s-master01' in ansible_hostname"

@@ -1,0 +1,14 @@
+---
+- block:
+
+    - name: Generate manifest file for Jenkins
+      template:
+        src: jenkins.j2
+        dest: $HOME/jenkins.yml
+
+    - name: Install Jenkins
+      shell: kubectl apply -f jenkins.yml
+      args:
+        chdir: $HOME
+
+  when: "'k8s-master01' in ansible_hostname"

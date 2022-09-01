@@ -1,0 +1,3 @@
+kubectl -n kube-system get deployments.apps coredns -o yaml >> coredns.yml
+sed -i 's+kubernetes.io/os: linux+node-role.kubernetes.io/control-plane: ""+g' coredns.yml
+kubectl apply -f coredns.yml
