@@ -1,4 +1,4 @@
-# ru.sadkomed.kubernetes
+# kubernetes
 
 ## Supported OS
 
