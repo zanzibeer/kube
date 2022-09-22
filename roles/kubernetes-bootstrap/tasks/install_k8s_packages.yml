@@ -12,9 +12,9 @@
 - name: Install kubelet kubeadm
   apt:
     name:
-    - kubelet
-    - kubeadm
-    - kubectl
+    - kubelet:1.23.9
+    - kubeadm:1.23.9
+    - kubectl:1.23.9
     state: latest
     update_cache: yes
 

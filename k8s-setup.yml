@@ -6,7 +6,7 @@
   become_method: sudo
   #gather_facts: no
   vars:
-    username_sudo: "user"                                # username for connection with sudo
+    username_sudo: "ubuntu"                              # username for connection with sudo
     balancer_address: "api.k8s.local"                    # address of load balancer
     nfs_server: "192.168.10.125"                         # address of nfs-node
     nfs_path: "/nfs_kube"                                # name of nfs share folder
