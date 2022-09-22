@@ -1,3 +1,4 @@
 [k8snodes]
 k8s-master01 ansible_host=192.168.10.201
-#k8s-worker01 ansible_host=192.168.10.211
+k8s-worker01 ansible_host=192.168.10.211
+k8s-worker02 ansible_host=192.168.10.211
