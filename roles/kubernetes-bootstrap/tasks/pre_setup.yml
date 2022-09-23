@@ -4,12 +4,12 @@
 #    policy: targeted
 #    state: "{{ selinux_state }}"
 #
-- name: Update system packages
-  apt:
-    name: "*"
-    state: latest
-    update_cache: yes
-  ignore_errors: yes
+#- name: Update system packages
+#  apt:
+#    name: "*"
+#    state: latest
+#    update_cache: yes
+#  ignore_errors: yes
 
 - name: Install some packages needed to configure the nodes
   apt:
