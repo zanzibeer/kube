@@ -17,11 +17,11 @@
 - name: Install metrics-server
   include_tasks: install-metrics-server.yml
 
-- name: Install nfs-provisioner
-  include_tasks: install-nfs-provisioner.yml
-
-- name: Install jenkins
-  include_tasks: install_jenkins.yml
+#- name: Install nfs-provisioner
+#  include_tasks: install-nfs-provisioner.yml
+#
+#- name: Install jenkins
+#  include_tasks: install_jenkins.yml
 
 #- name: Install HAProxy ingress-controller
 #  include_tasks: install-haproxy-ingress.yml
