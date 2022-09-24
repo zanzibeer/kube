@@ -20,6 +20,9 @@
 - name: Install metrics-server
   include_tasks: install-metrics-server.yml
 
+- name: Add ingress rules for Dashboard
+  include_tasks: add_dashboard_ingress.yml
+
 #- name: Install nfs-provisioner
 #  include_tasks: install-nfs-provisioner.yml
 #
@@ -27,5 +30,3 @@
 #  include_tasks: install_jenkins.yml
 
 #
-#- name: Add ingress rules for Dashboard
-#  include_tasks: add_dashboard_ingress.yml
