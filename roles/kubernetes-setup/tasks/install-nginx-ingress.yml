@@ -1,21 +1,27 @@
 ---
 - block:
 
-    - name: Generate Nginx-ingress manifest file
-      template:
-        src: nginx-ingress.j2
-        dest: $HOME/nginx-ingress.yml
+#    - name: Generate Nginx-ingress manifest file
+#      template:
+#        src: nginx-ingress.j2
+#        dest: $HOME/nginx-ingress.yml
+
+    - name: Add ingress-nginx stable chart repo
+      kubernetes.core.helm_repository:
+        name: stable
+        repo_url: "https://kubernetes.github.io/ingress-nginx"
 
     - name: Install Nginx helm chart
-      community.kubernetes.helm:
+      kubernetes.core.helm:
         chart_ref: ingress-nginx/ingress-nginx
-        chart_repo_url: https://kubernetes.github.io/ingress-nginx
         release_name: ingress-nginx
         release_namespace: nginx-ingress
         create_namespace: true
-        values: "{{ lookup('template', 'nginx-ingress.yml') | from_yaml }}"
-      args:
-        chdir: $HOME
+        update_repo_cache: True
+        values:
+          controller:
+              ingressClassResource:
+                default: true
 
 #    - name: Edit Nginx-ingress-class from manifest file
 #      shell: kubectl apply -f nginx-ingress.yml
