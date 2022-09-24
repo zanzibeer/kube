@@ -11,6 +11,9 @@
 - name: Install NodeLocal DNSCache
   include_tasks: install_nodelocal.yml
 
+- name: Install Nginx ingress-controller
+  include_tasks: install-nginx-ingress.yml
+
 - name: Install Kubernetes Dashboard
   include_tasks: install-dashboard.yml
 
@@ -23,8 +26,6 @@
 #- name: Install jenkins
 #  include_tasks: install_jenkins.yml
 
-#- name: Install HAProxy ingress-controller
-#  include_tasks: install-haproxy-ingress.yml
 #
 #- name: Add ingress rules for Dashboard
 #  include_tasks: add_dashboard_ingress.yml
