@@ -9,7 +9,7 @@
         mode: 0700
 
     - name: Add labels on nodes & taints on ingresses
-      shell: coredns.sh
+      shell: "./coredns.sh"
       args:
         chdir: $HOME
 
