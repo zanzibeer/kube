@@ -5,6 +5,9 @@
     - "{{ ansible_os_family }}{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_os_family }}.yml"
 
+- name: Include task to disable auto_update
+  include_tasks: disable_auto_update.yml
+
 - name: Include Pre-reqs setup task
   include_tasks: pre_setup.yml
 
