@@ -9,7 +9,9 @@
         mode: 0700
 
     - name: Add labels on nodes & taints on ingresses
-      shell: $HOME/coredns.sh
+      shell: coredns.sh
+      args:
+        chdir: $HOME
 
 #    - name: Change NodeSelector in CoreDNS deployment and apply
 #      shell: "{{ item }}"
