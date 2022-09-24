@@ -3,11 +3,11 @@
   timezone:
     name: "{{ timezone }}"
 
-- name: Ensure chrony package is installed
-  apt:
-    name: chrony
-    state: present
-  ignore_errors: yes
+#- name: Ensure chrony package is installed
+#  apt:
+#    name: chrony
+#    state: present
+#  ignore_errors: yes
 
 - name: Enable and start chronyd service
   service:
