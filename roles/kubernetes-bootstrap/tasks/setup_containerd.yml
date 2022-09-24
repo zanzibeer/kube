@@ -9,11 +9,11 @@
     repo: deb [arch=amd64] https://download.docker.com/linux/debian bullseye stable
     state: present
 
-#- name: Update apt and install containerd
-#  apt:
-#    update_cache: yes
-#    name: containerd
-#    state: latest
+- name: Update apt and install containerd
+  apt:
+    update_cache: yes
+    name: containerd
+    state: latest
 
 - name: Create containerd catalog
   file:
