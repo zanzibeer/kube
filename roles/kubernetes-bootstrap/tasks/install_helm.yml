@@ -21,4 +21,7 @@
         path: $HOME/linux-amd64
         state: absent
 
+    - name: Add collection community.kubernetes
+      shell: "ansible-galaxy collection install community.kubernetes"
+
   when: ansible_facts['hostname'] == "k8s-master01"
