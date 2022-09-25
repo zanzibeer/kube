@@ -27,3 +27,5 @@
     - role: kubernetes-initialize
       tags: init
     - role: kubernetes-setup
+    - role: debug
+      tags: debug
