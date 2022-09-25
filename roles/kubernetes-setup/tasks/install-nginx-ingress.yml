@@ -21,10 +21,11 @@
         update_repo_cache: True
         values:
           controller:
-              ingressClassResource:
+            ingressClassResource:
                 default: true
-
-#    - name: Edit Nginx-ingress-class from manifest file
+            service:
+              externalIPs: 192.168.10.212
+  #    - name: Edit Nginx-ingress-class from manifest file
 #      shell: kubectl apply -f nginx-ingress.yml
 #      args:
 #        chdir: $HOME
