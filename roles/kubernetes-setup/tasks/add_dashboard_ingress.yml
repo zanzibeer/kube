@@ -3,7 +3,7 @@
 
     - name: Pause for some minutes to run nginx-ingress pod
       ansible.builtin.pause:
-        minutes: 2
+        minutes: 1
 
     - name: Generate dashboard ingress rule file
       template:
