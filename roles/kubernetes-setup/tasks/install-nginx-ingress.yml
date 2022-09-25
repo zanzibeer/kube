@@ -18,6 +18,7 @@
             ingressClassResource:
                 default: true
             service:
-              externalIPs: 192.168.10.212
+              externalIPs:
+              - 192.168.10.212
 
   when: "'k8s-master01' in ansible_hostname"
