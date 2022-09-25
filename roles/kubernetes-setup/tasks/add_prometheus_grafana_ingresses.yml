@@ -1,12 +1,12 @@
 ---
 - block:
 
-    - name: Generate dashboard ingress rule file
+    - name: Generate kube-prometheus-stack ingress rules file
       template:
         src: prometheus-stack-ingress.j2
         dest: $HOME/prometheus-stack-ingress.yml
 
-    - name: Apply dashboard ingress rule
+    - name: Apply kube-prometheus-stack ingress rules
       shell: kubectl apply -f prometheus-stack-ingress.yml
       args:
         chdir: $HOME
