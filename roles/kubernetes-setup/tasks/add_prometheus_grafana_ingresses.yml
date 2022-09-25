@@ -1,0 +1,18 @@
+---
+- block:
+
+    - name: Pause for some minutes to run nginx-ingress pod
+      ansible.builtin.pause:
+        minutes: 1
+
+    - name: Generate dashboard ingress rule file
+      template:
+        src: dashboard-ingress.j2
+        dest: $HOME/dashboard-ingress.yml
+
+    - name: Apply dashboard ingress rule
+      shell: kubectl apply -f dashboard-ingress.yml
+      args:
+        chdir: $HOME
+
+  when: "'k8s-master01' in ansible_hostname"

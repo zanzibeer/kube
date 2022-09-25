@@ -1,0 +1,18 @@
+---
+- block:
+
+    - name: Add prometheus-community chart repo
+      kubernetes.core.helm_repository:
+        name: prometheus-community
+        repo_url: "https://prometheus-community.github.io/helm-charts"
+
+    - name: Install kube-prometheus-stack helm chart
+      kubernetes.core.helm:
+        chart_ref: prometheus-community/kube-prometheus-stack
+        release_name: kube-prometheus-stack
+        release_namespace: monitoring
+        create_namespace: true
+        update_repo_cache: True
+#        values:
+
+  when: "'k8s-master01' in ansible_hostname"
