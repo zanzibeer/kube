@@ -13,7 +13,8 @@
 
     - name: Install Nginx helm chart
       kubernetes.core.helm:
-        chart_ref: ingress-nginx/ingress-nginx
+#        chart_ref: ingress-nginx/ingress-nginx
+        chart_ref: ingress-nginx
         release_name: ingress-nginx
         release_namespace: nginx-ingress
         create_namespace: true
