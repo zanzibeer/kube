@@ -6,11 +6,11 @@
         kind: Pod
         label_selectors:
           - "app.kubernetes.io/name: ingress-nginx"
-        wait: yes
-        wait_condition:
-          reason: ready
+#        wait: yes
+#        wait_condition:
+#          reason: ready
         namespace: nginx-ingress
-        wait_sleep: 10
-        wait_timeout: 360
+#        wait_sleep: 10
+#        wait_timeout: 360
 
   when: "'k8s-master01' in ansible_hostname"
