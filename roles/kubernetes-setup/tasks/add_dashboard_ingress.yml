@@ -1,6 +1,10 @@
 ---
 - block:
 
+    - name: Pause for some minutes to run nginx-ingress pod
+      ansible.builtin.pause:
+        minutes: 2
+
     - name: Generate dashboard ingress rule file
       template:
         src: dashboard-ingress.j2
