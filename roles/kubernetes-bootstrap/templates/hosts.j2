@@ -2,9 +2,9 @@
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
 {% for host in groups['k8snodes'] %}
-{% if hostvars[host]['ansible_facts']['hostname'] == "k8s-master01" %}
-{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }} {{ hostvars[host]['ansible_facts']['fqdn'] }} {{ balancer_address }} {{ hostvars[host]['ansible_facts']['hostname'] }}
+{% if hostvars[host]['ansible_facts']['ansible_hostname'] == "k8s-master01" %}
+{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }} {{ hostvars[host]['ansible_facts']['fqdn'] }} {{ balancer_address }} {{ hostvars[host]['ansible_facts']['ansible_hostname'] }}
 {% else %}
-{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }} {{ hostvars[host]['ansible_facts']['fqdn'] }} {{ hostvars[host]['ansible_facts']['hostname'] }}
+{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }} {{ hostvars[host]['ansible_facts']['fqdn'] }} {{ hostvars[host]['ansible_facts']['ansible_hostname'] }}
 {% endif %}
 {% endfor %}
