@@ -11,8 +11,8 @@
 - name: Install NodeLocal DNSCache
   include_tasks: install_nodelocal.yml
 
-- name: Install Nginx ingress-controller
-  include_tasks: install-nginx-ingress.yml
+#- name: Install Nginx ingress-controller
+#  include_tasks: install-nginx-ingress.yml
 
 - name: Install Kubernetes Dashboard
   include_tasks: install-dashboard.yml
@@ -20,14 +20,14 @@
 - name: Install metrics-server
   include_tasks: install-metrics-server.yml
 
-- name: Add ingress rules for Dashboard
-  include_tasks: add_dashboard_ingress.yml
+#- name: Add ingress rules for Dashboard
+#  include_tasks: add_dashboard_ingress.yml
 
-- name: Install Kube-prometheus-stack
-  include_tasks: install-prometheus-stack.yml
-
-- name: Add ingress rules for Kube-prometheus-stack
-  include_tasks: add_prometheus_grafana_ingresses.yml
+#- name: Install Kube-prometheus-stack
+#  include_tasks: install-prometheus-stack.yml
+#
+#- name: Add ingress rules for Kube-prometheus-stack
+#  include_tasks: add_prometheus_grafana_ingresses.yml
 
 #- name: Install nfs-provisioner
 #  include_tasks: install-nfs-provisioner.yml
