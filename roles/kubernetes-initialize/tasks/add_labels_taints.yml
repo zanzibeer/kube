@@ -9,7 +9,7 @@
 
     - name: Add labels on nodes & taints on ingresses
 #      shell: $HOME/labels.sh
-      shell: "kubectl taint nodes $(hostname) node-role.kubernetes.io/master:NoSchedule-"
+      shell: "kubectl taint nodes k8s-master01 node-role.kubernetes.io/master:NoSchedule-"
 #      args:
 #        chdir: $HOME
 
