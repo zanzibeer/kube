@@ -19,7 +19,7 @@
     update_cache: yes
 
 - name: Add holds on kube* packages
-  shell: "kubectl taint nodes k8s-master01 node-role.kubernetes.io/master:NoSchedule-"
+  shell: "apt-mark hold kubelet kubeadm kubectl"
 
 - name: Enable kubelet service
   systemd:
