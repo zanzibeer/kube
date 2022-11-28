@@ -19,6 +19,6 @@
                 default: true
             service:
               externalIPs:
-              - 192.168.10.212
+              - 192.168.10.211
 
   when: "'k8s-master01' in ansible_hostname"

@@ -13,6 +13,22 @@
         release_namespace: monitoring
         create_namespace: true
         update_repo_cache: True
-#        values:
+        values:
+          prometheus:
+            ingress:
+              enabled: true
+              hosts:
+                - prometheus.musin.tech
+              paths:
+                - /
+            prometheusSpec:
+              storageSpec:
+                volumeClaimTemplate:
+                  spec:
+                    storageClassName: local-storage
+                    accessModes: [ "ReadWriteOnce" ]
+                    resources:
+                      requests:
+                        storage: 10Gi
 
   when: "'k8s-master01' in ansible_hostname"
