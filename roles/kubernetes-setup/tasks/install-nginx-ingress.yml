@@ -1,6 +1,11 @@
 ---
 - block:
 
+    - name: install pre-requisites
+      pip:
+        name:
+          - pyyaml
+
     - name: Add ingress-nginx stable chart repo
       kubernetes.core.helm_repository:
         name: ingress-nginx
