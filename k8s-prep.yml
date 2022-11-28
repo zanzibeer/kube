@@ -18,6 +18,10 @@
     username_sudo: "debian"                              # username for connection with sudo
     helm_release: "3.10.2"                                # Helm version to be installed / https://github.com/helm/helm/releases
     balancer_address: "api.k8s.local"                    # address of load balancer
+    nfs_server: "192.168.10.201"                         # address of nfs-node
+    nfs_path: "/nfs_kube"                                # name of nfs share folder
+    provisioner_name: "nfs-client-provisioner"
+    storageclass_name: "nfs-storage"
     # Docker proxy support
     setup_proxy: false                                   # Set to true to configure proxy
     proxy_server: "proxy.example.com:8080"               # Proxy server address and port

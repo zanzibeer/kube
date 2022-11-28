@@ -14,6 +14,13 @@
         create_namespace: true
         update_repo_cache: True
         values:
+          grafana:
+            ingress:
+              enabled: true
+            hosts:
+              - grafana.musin.tech
+            paths:
+              - /
           prometheus:
             ingress:
               enabled: true
