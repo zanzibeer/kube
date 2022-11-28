@@ -15,7 +15,7 @@
     container_runtime: "containerd"                      # cri-o, containerd
     pod_network_cidr: "10.244.0.0/16"                    # pod subnet
     configure_firewalld: false                           # true / false (keep it false, k8s>1.19 have issues with firewalld)
-    username_sudo: "ubuntu"                              # username for connection with sudo
+    username_sudo: "debian"                              # username for connection with sudo
     helm_release: "3.10.2"                                # Helm version to be installed / https://github.com/helm/helm/releases
     balancer_address: "api.k8s.local"                    # address of load balancer
     # Docker proxy support
