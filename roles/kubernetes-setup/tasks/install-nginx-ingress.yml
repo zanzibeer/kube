@@ -20,5 +20,7 @@
             service:
               externalIPs:
               - 192.168.10.211
+            nodeSelector:
+              "kubernetes.io/hostname=k8s-worker01"
 
   when: "'k8s-master01' in ansible_hostname"
