@@ -20,8 +20,8 @@
 - name: Add workers
   include_tasks: add_nodes.yml
 
-- name: Label nodes
-  include_tasks: add_labels_taints.yml
+#- name: Label nodes
+#  include_tasks: add_labels_taints.yml
 
 - name: Autocomplete
   include_tasks: add_autocomplete.yml
