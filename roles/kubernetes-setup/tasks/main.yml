@@ -32,7 +32,7 @@
 - name: Install Kube-prometheus-stack
   include_tasks: install-prometheus-stack.yml
 
-#- name: Install jenkins
-#  include_tasks: install_jenkins.yml
+- name: Install jenkins
+  include_tasks: install_jenkins.yml
 
 #
