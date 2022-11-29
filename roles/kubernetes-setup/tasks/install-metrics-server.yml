@@ -1,14 +1,14 @@
 ---
 - block:
 
-#    - name: Generate manifest file for Metrics Server
-#      template:
-#        src: metrics-server.j2
-#        dest: $HOME/metrics-server.yml
+    - name: Generate manifest file for Metrics Server
+      template:
+        src: metrics-server.j2
+        dest: $HOME/metrics-server.yml
 
     - name: Install Metrics Server
-#      shell: kubectl apply -f metrics-server.yml
-      shell: kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+      shell: kubectl apply -f metrics-server.yml
+#      shell: kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
       args:
         chdir: $HOME
 
