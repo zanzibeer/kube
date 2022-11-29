@@ -1,0 +1,23 @@
+---
+- block:
+
+    - name: Add nexus chart repo
+      kubernetes.core.helm_repository:
+        name: sonatype
+        repo_url: "https://sonatype.github.io/helm3-charts/"
+
+    - name: Install nexus helm chart
+      kubernetes.core.helm:
+        chart_ref: sonatype/nexus-repository-manager
+        release_name: nexus-repository-manager
+        release_namespace: nexus
+        create_namespace: true
+        update_repo_cache: true
+        values:
+          ingress:
+            enabled: true
+            hostRepo: nexus.musin.tech
+          persistence:
+            storageClass: "nfs-storage"
+
+  when: ansible_facts['hostname'] == "k8s-master01"

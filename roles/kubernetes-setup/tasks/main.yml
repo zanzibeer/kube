@@ -35,4 +35,7 @@
 - name: Install jenkins
   include_tasks: install_jenkins.yml
 
+- name: Install Nexus
+  include_tasks: install-nexus.yml
+
 #
