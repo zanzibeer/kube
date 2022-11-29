@@ -9,7 +9,7 @@
         owner: root
         group: root
       loop:
-        - "/monitoring/prometheus-db"
+        - "/monitoring"
 
   when: ansible_facts['hostname'] == "k8s-worker01"
 
@@ -33,7 +33,7 @@
           api_version: v1
           kind: PersistentVolume
           metadata:
-            name: prometheus-db
+            name: prometheus-db-pv
           spec:
             capacity:
               storage: 10Gi
@@ -42,7 +42,7 @@
             persistentVolumeReclaimPolicy: Retain
             storageClassName: local-storage
             local:
-              path: "/monitoring/prometheus-db"
+              path: "/monitoring"
             nodeAffinity:
               required:
                 nodeSelectorTerms:
