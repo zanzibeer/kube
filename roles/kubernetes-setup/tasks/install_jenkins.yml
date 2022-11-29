@@ -35,10 +35,10 @@
               - ansicolor
             ingress:
               enabled: true
-              hosts:
+              hostName:
                 - jenkins.musin.tech
-              paths:
-                - /
+#              paths:
+#                - /
             prometheus:
               enabled: true
           persistence:
