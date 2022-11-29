@@ -15,18 +15,19 @@
         update_repo_cache: True
         values:
           grafana:
+            defaultDashboardsTimezone: Europe/Moscow
             ingress:
               enabled: true
               hosts:
                 - grafana.musin.tech
-              paths:
+              path:
                 - /
           prometheus:
             ingress:
               enabled: true
               hosts:
                 - prometheus.musin.tech
-              paths:
+              path:
                 - /
             prometheusSpec:
               storageSpec:
