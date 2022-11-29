@@ -1,0 +1,52 @@
+---
+- block:
+
+    - name: Create containerd catalog
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0777'
+        owner: root
+        group: root
+      loop:
+        - "/monitoring/prometheus-db"
+
+  when: ansible_facts['hostname'] == "k8s-worker01"
+
+---
+- block:
+
+    - name: Create storageClass local-storage
+      kubernetes.core.k8s:
+        name: local-storage
+        api_version: storage.k8s.io/v1
+        kind: StorageClass
+        state: present
+        provisioner: kubernetes.io/no-provisioner
+        volumeBindingMode: WaitForFirstConsumer
+
+    - name: Create prometheus PV
+      kubernetes.core.k8s:
+        name: prometheus-db
+        api_version: v1
+        kind: PersistentVolume
+        state: present
+        spec:
+          capacity:
+            storage: 10Gi
+          accessModes:
+            - ReadWriteOnce
+          persistentVolumeReclaimPolicy: Retain
+          storageClassName: local-storage
+          local:
+            path: "/monitoring/prometheus-db"
+          nodeAffinity:
+            required:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: kubernetes.io/hostname
+                      operator: In
+                      values:
+                        - k8s-worker01
+
+  when: ansible_facts['hostname'] == "k8s-master01"

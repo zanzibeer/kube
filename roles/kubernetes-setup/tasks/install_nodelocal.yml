@@ -1,14 +1,15 @@
 ---
 - block:
 
-    - name: Generate NodeLocal DNSCache manifest file
-      template:
-        src: nodelocaldns.j2
-        dest: $HOME/nodelocaldns.yml
+#    - name: Generate NodeLocal DNSCache manifest file
+#      template:
+#        src: nodelocaldns.j2
+#        dest: $HOME/nodelocaldns.yml
 
     - name: Install NodeLocal DNSCache from manifest file
-      shell: kubectl apply -f nodelocaldns.yml
+#      shell: kubectl apply -f nodelocaldns.yml
+      shell: kubectl apply -f https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/dns/nodelocaldns/nodelocaldns.yaml
       args:
         chdir: $HOME
 
-  when: "'k8s-master01' in ansible_hostname"
+  when: ansible_facts['hostname'] == "k8s-master01"

@@ -11,3 +11,4 @@ basic_packages:
   - ntp
   - tmux
   - nfs-common
+  - python3-pip

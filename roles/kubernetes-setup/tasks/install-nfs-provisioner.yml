@@ -30,4 +30,4 @@
       args:
         chdir: $HOME
 
-  when: "'k8s-master01' in ansible_hostname"
+  when: ansible_facts['hostname'] == "k8s-master01"
