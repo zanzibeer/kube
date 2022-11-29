@@ -36,11 +36,9 @@
             ingress:
               enabled: true
               hostName: jenkins.musin.tech
-#              paths:
-#                - /
             prometheus:
               enabled: true
           persistence:
             storageClass: nfs-storage
 
-  when: "'k8s-master01' in ansible_hostname"
+  when: ansible_facts['hostname'] == "k8s-master01"
