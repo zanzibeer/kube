@@ -20,14 +20,14 @@
               enabled: true
               hosts:
                 - grafana.musin.tech
-              path:
+              paths:
                 - /
           prometheus:
             ingress:
               enabled: true
               hosts:
                 - prometheus.musin.tech
-              path:
+              paths:
                 - /
             prometheusSpec:
               storageSpec:
