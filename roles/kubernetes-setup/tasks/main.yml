@@ -32,9 +32,6 @@
 - name: Install Kube-prometheus-stack
   include_tasks: install-prometheus-stack.yml
 
-#- name: Add ingress rules for Kube-prometheus-stack
-#  include_tasks: add_prometheus_grafana_ingresses.yml
-
 #- name: Install jenkins
 #  include_tasks: install_jenkins.yml
 

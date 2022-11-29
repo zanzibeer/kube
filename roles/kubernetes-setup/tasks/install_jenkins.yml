@@ -1,14 +1,47 @@
 ---
 - block:
 
-    - name: Generate manifest file for Jenkins
-      template:
-        src: jenkins.j2
-        dest: $HOME/jenkins.yml
+#    - name: Generate manifest file for Jenkins
+#      template:
+#        src: jenkins.j2
+#        dest: $HOME/jenkins.yml
+#
+#    - name: Install Jenkins
+#      shell: kubectl apply -f jenkins.yml
+#      args:
+#        chdir: $HOME
 
-    - name: Install Jenkins
-      shell: kubectl apply -f jenkins.yml
-      args:
-        chdir: $HOME
+    - name: Add jenkins chart repo
+      kubernetes.core.helm_repository:
+        name: jenkinsci
+        repo_url: "https://charts.jenkins.io"
+
+    - name: Install jenkins helm chart
+      kubernetes.core.helm:
+        chart_ref: jenkinsci/jenkins
+        release_name: jenkins
+        release_namespace: jenkins
+        create_namespace: true
+        update_repo_cache: True
+        values:
+          controller:
+            installPlugins:
+              - kubernetes
+              - workflow-aggregator
+              - git
+              - configuration-as-code
+              - greenballs
+              - pipeline-stage-view
+              - ansicolor
+            ingress:
+              enabled: true
+              hosts:
+                - jenkins.musin.tech
+              paths:
+                - /
+            prometheus:
+              enabled: true
+          persistence:
+            storageClass: nfs-storage
 
   when: "'k8s-master01' in ansible_hostname"

@@ -17,10 +17,10 @@
           grafana:
             ingress:
               enabled: true
-            hosts:
-              - grafana.musin.tech
-            paths:
-              - /
+              hosts:
+                - grafana.musin.tech
+              paths:
+                - /
           prometheus:
             ingress:
               enabled: true
