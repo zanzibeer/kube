@@ -13,7 +13,6 @@
 
   when: ansible_facts['hostname'] == "k8s-worker01"
 
----
 - block:
 
     - name: Create storageClass local-storage
