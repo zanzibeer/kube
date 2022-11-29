@@ -38,4 +38,4 @@
                       requests:
                         storage: 10Gi
 
-  when: "'k8s-master01' in ansible_hostname"
+  when: ansible_facts['hostname'] == "k8s-master01"
