@@ -29,6 +29,6 @@
             nodeSelector:
               kubernetes.io/hostname: k8s-worker01
             extraArgs:
-              default-ssl-certificate: "nginx-ingress/ca.crt"
+              default-ssl-certificate: "nginx-ingress/ca"
 
   when: ansible_facts['hostname'] == "k8s-master01"
