@@ -17,10 +17,10 @@
           ingress:
             enabled: true
             hostRepo: nexus.musin.tech
-            tls:
-              - secretName: nexus
-                hosts:
-                  - nexus.musin.tech
+#            tls:
+#              - secretName: nexus
+#                hosts:
+#                  - nexus.musin.tech
           persistence:
             storageClass: "nfs-storage"
 
