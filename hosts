@@ -3,4 +3,4 @@ k8s-master01 ansible_host=192.168.10.201
 #k8s-master02 ansible_host=192.168.10.202
 #k8s-master03 ansible_host=192.168.10.203
 k8s-worker01 ansible_host=192.168.10.211
-k8s-worker02 ansible_host=192.168.10.212
+#k8s-worker02 ansible_host=192.168.10.212
