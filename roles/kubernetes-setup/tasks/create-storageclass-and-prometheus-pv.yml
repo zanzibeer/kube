@@ -1,7 +1,7 @@
 ---
 - block:
 
-    - name: Create containerd catalog
+    - name: Create monitoring catalog
       file:
         path: "{{ item }}"
         state: directory
