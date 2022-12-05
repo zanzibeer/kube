@@ -1,4 +1,13 @@
 ---
+- name: Load required modules
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - br_netfilter
+    - overlay
+#    - nf_conntrack
+
 - name: Create the .conf file to load the modules at bootup
   template:
     src: kernel_modules.conf.j2
@@ -11,17 +20,8 @@
     sysctl_set: yes
     state: present
     reload: yes
-  ignore_errors: True
+  ignore_errors: true
   with_items:
     - {key: net.bridge.bridge-nf-call-ip6tables, value: 1}
     - {key: net.bridge.bridge-nf-call-iptables,  value: 1}
     - {key: net.ipv4.ip_forward,  value: 1}
-
-- name: Load required modules
-  modprobe:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - br_netfilter
-    - overlay
-#    - nf_conntrack
