@@ -22,6 +22,7 @@
     nfs_path: "/nfs_kube"                                # name of nfs share folder
     provisioner_name: "nfs-client-provisioner"
     storageclass_name: "nfs-storage"
+    harbor_dn: "harbor.musin.tech/gcr"
     # Docker proxy support
     setup_proxy: false                                   # Set to true to configure proxy
     proxy_server: "proxy.example.com:8080"               # Proxy server address and port
@@ -31,7 +32,7 @@
       tags: boot
     - role: kubernetes-initialize
       tags: init
-#    - role: kubernetes-setup
-#      tags: setup
+    - role: kubernetes-setup
+      tags: setup
 #    - role: debug
 #      tags: debug
