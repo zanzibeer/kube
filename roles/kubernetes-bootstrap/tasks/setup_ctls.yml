@@ -14,4 +14,4 @@
 - name: Copy crictl config file
   template:
     src: crictl.j2
-    dest: /etc/crictl.yml
+    dest: /etc/crictl.yaml
