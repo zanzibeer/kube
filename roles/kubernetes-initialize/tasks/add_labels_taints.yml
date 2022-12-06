@@ -1,11 +1,11 @@
 ---
 - block:
 
-    - name: Generate labels.sh script
-      template:
-        src: hosts.j2
-        dest: $HOME/labels.sh
-        mode: 0700
+#    - name: Generate labels.sh script
+#      template:
+#        src: hosts.j2
+#        dest: $HOME/labels.sh
+#        mode: 0700
 
     - name: Add labels on nodes & taints on ingresses
 #      shell: $HOME/labels.sh

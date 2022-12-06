@@ -6,14 +6,14 @@ networking:
   podSubnet: {{ pod_network_cidr }}
 etcd:
   local:
-    imageRepository: {{ harbor_dn }}
+    imageRepository: {{ harbor_gcr }}
     imageTag: "3.5.1-0"
 #  external:
 #    caFile: "/etcd/kubernetes/pki/ca.crt"
-imageRepository: {{ harbor_dn }}
+imageRepository: {{ harbor_gcr }}
 certificatesDir: "/etc/kubernetes/pki"
 dns:
-  imageRepository: {{ harbor_dn }}/coredns
+  imageRepository: {{ harbor_gcr }}coredns
 
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
