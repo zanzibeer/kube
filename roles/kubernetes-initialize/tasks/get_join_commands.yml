@@ -17,4 +17,4 @@
       set_fact:
         cplanes_join_command: "{{ join_command_raw.stdout_lines[0] }} --control-plane --certificate-key {{ cplane_certificate_key.stdout_lines[0] }}"
 
-  when: "'k8s-master01' in ansible_hostname"
+  when: ansible_facts['hostname'] == "k8s-master01"
