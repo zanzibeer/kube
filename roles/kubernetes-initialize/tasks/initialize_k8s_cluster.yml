@@ -1,6 +1,14 @@
 ---
 - block:
 
+    - name: Load required modules
+      modprobe:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - br_netfilter
+        - overlay
+
     - name: Copy kube-init.yaml
       template:
         src: kube-init.j2
