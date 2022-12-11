@@ -13,7 +13,7 @@ etcd:
 imageRepository: {{ harbor_gcr }}
 certificatesDir: "/etc/kubernetes/pki"
 dns:
-  imageRepository: {{ harbor_gcr }}coredns
+  imageRepository: {{ harbor_gcr }}/coredns
 
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
