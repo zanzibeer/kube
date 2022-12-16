@@ -4,6 +4,14 @@ kubernetesVersion: {{ k8s_version }}
 controlPlaneEndpoint: {{ balancer_address }}
 networking:
   podSubnet: {{ pod_network_cidr }}
+etcd:
+  local:
+    imageRepository: {{ harbor_gcr }}
+    imageTag: "3.5.1-0"
+imageRepository: {{ harbor_gcr }}
+certificatesDir: "/etc/kubernetes/pki"
+dns:
+  imageRepository: {{ harbor_gcr }}/coredns
 
 ---
 apiVersion: kubeadm.k8s.io/v1beta3

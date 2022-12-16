@@ -22,6 +22,7 @@
     nfs_path: "/nfs_kube"                                # name of nfs share folder
     provisioner_name: "nfs-client-provisioner"
     storageclass_name: "nfs-storage"
+    harbor_use: false
     harbor_gcr: "harbor.musin.tech/k8s.gcr.io"
     harbor: "harbor.musin.tech/"
     # Docker proxy support
