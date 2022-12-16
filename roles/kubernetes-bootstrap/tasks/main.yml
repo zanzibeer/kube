@@ -40,3 +40,6 @@
 
 - name: Install & configure Helm
   include_tasks: install_helm.yml
+
+- name: Install & configure k9s
+  include_tasks: install_k9s.yml
