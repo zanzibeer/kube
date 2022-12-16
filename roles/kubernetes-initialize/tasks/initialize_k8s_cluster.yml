@@ -9,10 +9,17 @@
         - br_netfilter
         - overlay
 
+    - name: Copy kube-init.yaml with Harbor
+      template:
+        src: kube-init-harbor.j2
+        dest: $HOME/kube-init.yml
+      when: harbor_use == true
+
     - name: Copy kube-init.yaml
       template:
         src: kube-init.j2
         dest: $HOME/kube-init.yml
+      when: harbor_use == false
 
     - name: Initialize the cluster
       shell: kubeadm init --config kube-init.yml --upload-certs | tee -a kube_init.log
