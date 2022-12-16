@@ -1,0 +1,25 @@
+---
+- block:
+
+    - name: Download k9s archive
+      unarchive:
+        src: "https://github.com/derailed/k9s/releases/download/v0.26.7/k9s_Linux_x86_64.tar.gz"
+        dest: $HOME/k9s
+        remote_src: yes
+        creates: yes
+
+    - name: Copy k9s bin
+      copy:
+        src: $HOME/k9s/k9s
+        dest: /usr/local/bin/k9s
+        remote_src: yes
+        mode: 0755
+        owner: root
+        group: root
+
+    - name: Delete k9s install dir
+      file:
+        path: $HOME/k9s
+        state: absent
+
+  when: ansible_facts['hostname'] == "k8s-master01"
