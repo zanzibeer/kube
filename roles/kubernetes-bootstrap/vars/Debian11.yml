@@ -13,3 +13,4 @@ basic_packages:
   - nfs-common
   - python3-pip
   - git
+  - xclip
