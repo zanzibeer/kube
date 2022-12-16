@@ -19,6 +19,7 @@
     - name: Install jenkins helm chart
       kubernetes.core.helm:
         chart_ref: jenkinsci/jenkins
+        chart_version: 4.2.16
         release_name: jenkins
         release_namespace: jenkins
         create_namespace: true
