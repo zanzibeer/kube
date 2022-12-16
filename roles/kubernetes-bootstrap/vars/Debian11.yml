@@ -12,3 +12,4 @@ basic_packages:
   - tmux
   - nfs-common
   - python3-pip
+  - git
