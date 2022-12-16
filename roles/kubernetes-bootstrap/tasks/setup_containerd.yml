@@ -25,17 +25,17 @@
   loop:
     - "/etc/containerd"
 
+- name: Copy containerd/config file with Harbor
+  template:
+    src: containerd_config_harbor.j2
+    dest: /etc/containerd/config.toml
+  when: harbor_use == true
+
 - name: Copy containerd/config file
   template:
     src: containerd_config.j2
     dest: /etc/containerd/config.toml
   when: harbor_use == false
-
-- name: Copy containerd/config file
-  template:
-    src: containerd_config_harbor.j2
-    dest: /etc/containerd/config.toml
-  when: harbor_use == true
 
 - name: Start and enable containerd service
   systemd:
