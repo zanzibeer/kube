@@ -1,11 +1,17 @@
 ---
 - block:
 
+    - name: Generate Calico manifest file with Harbor
+      template:
+        src: calico.j2
+        dest: $HOME/calico_harbor.yml
+      when: harbor_use == true
+
     - name: Generate Calico manifest file
       template:
         src: calico.j2
         dest: $HOME/calico.yml
-      when: k8s_cni == "calico"
+      when: harbor_use == false
 
     - name: install Calico CNI
       shell: kubectl apply -f calico.yml
